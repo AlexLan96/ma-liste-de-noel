@@ -1,1 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma liste de Noël 🎄</title>
 
+    <style>
+        :root {
+            --rouge: #c62828;
+            --vert: #176b45;
+            --fond: #fffaf0;
+            --texte: #302b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--texte);
+            background: var(--fond);
+        }
+
+        header {
+            padding: 45px 20px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, var(--rouge), var(--vert));
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+        }
+
+        header p {
+            font-size: 1.1rem;
+        }
+
+        main {
+            width: min(1100px, 92%);
+            margin: 35px auto;
+        }
+
+        .intro {
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .intro h2 {
+            color: var(--vert);
+            font-size: 2rem;
+        }
+
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .gift-card {
+            overflow: hidden;
+            background: white;
+            border: 2px solid #f0e4d3;
+            border-radius: 18px;
+            box-shadow: 0 5px 15px #00000010;
+            transition: transform 0.2s;
+        }
+
+        .gift-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .gift-image {
+            display: grid;
+            min-height: 180px;
+            place-items: center;
+            background: #fce8d5;
+            font-size: 5rem;
+        }
+
+        .gift-content {
+            padding: 20px;
+        }
+
+        .gift-content h3 {
+            color: var(--vert);
+        }
+
+        .gift-content p {
+            line-height: 1.6;
+        }
+
+        .priority {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #fff0bf;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .gift-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 16px;
+            color: white;
+            background: var(--rouge);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .gift-link:hover {
+            background: #9e1e1e;
+        }
+
+        .note {
+            margin-top: 35px;
+            padding: 22px;
+            background: #e7f4e9;
+            border-radius: 14px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            color: white;
+            background: var(--vert);
+            text-align: center;
+        }
+
+        @media (max-width: 400px) {
+            .gift-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🎄 Ma liste de Noël 🎁</h1>
+        <p>Quelques idées pour un Noël plein de surprises !</p>
+        <div aria-hidden="true">🎅 🎁 ⭐ ❄️</div>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>Ma sélection de cadeaux ✨</h2>
+            <p>
+                Voici quelques idées de cadeaux qui me feraient plaisir.
+                Merci de contribuer à la magie de Noël !
+            </p>
+        </section>
+
+        <section class="gift-grid" aria-label="Liste des cadeaux">
+
+            <!-- Cadeau numéro 1 -->
+            <article class="gift-card">
+                <div class="gift-image" aria-hidden="true">🎁</div>
+
+                <div class="gift-content">
+                    <span class="priority">⭐ Priorité 1</span>
+                    <h3>Exemple de cadeau</h3>
+
+                    <p>
+                        Remplace ce texte par la description du cadeau
+                        que tu souhaites recevoir.
+                    </p>
+
+                    <p>
+                        <strong>Caractéristiques :</strong>
+                        modèle, couleur ou référence à préciser.
+                    </p>
+
+                    <a
+                        class="gift-link"
+                        href="https://example.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Voir en boutique ↗
+                    </a>
+                </div>
+            </article>
+
+            <!-- Cadeau numéro 2 -->
+            <article class="gift-card">
+                <div class="gift-image" aria-hidden="true">🤖</div>
+
+                <div class="gift-content">
+                    <span class="priority">⭐ Priorité 2</span>
+                    <h3>Carte de développement ESP32</h3>
+
+                    <p>
+                        Un composant électronique pour mes projets
+                        de programmation et de bricolage.
+                    </p>
+
+                    <p>
+                        <strong>Caractéristiques :</strong>
+                        modèle exact à préciser.
+                    </p>
+
+                    <a
+                        class="gift-link"
+                        href="https://example.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Voir en boutique ↗
+                    </a>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="note">
+            🎄 <strong>Merci et joyeux Noël !</strong>
+            <br>
+            Cette liste est en cours de préparation.
+        </section>
+    </main>
+
+    <footer>
+        <p>Fait avec ❤️ et un peu de magie de Noël ✨</p>
+    </footer>
+
+</body>
+</html>
