@@ -2,264 +2,199 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ma liste de Noël 🎄</title>
-<style>
-* { box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma liste de Noël 🎄</title>
+  <style>
+    * { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: #302b2b;
-  background: #fffaf0;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #123d2b, #176344);
+      color: #fff;
+      min-height: 100vh;
+    }
 
-header {
-  padding: 45px 20px;
-  text-align: center;
-  color: white;
-  background: linear-gradient(135deg, #bd2929, #176b45);
-}
+    header {
+      text-align: center;
+      padding: 45px 20px 30px;
+    }
 
-header h1 { font-size: clamp(2rem, 6vw, 3rem); }
+    header h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      margin: 0 0 12px;
+    }
 
-main {
-  width: min(1100px, 92%);
-  margin: 35px auto;
-}
+    header p {
+      font-size: 1.1rem;
+      color: #e4f5e9;
+    }
 
-.intro { text-align: center; margin-bottom: 30px; }
-.intro h2 { color: #176b45; }
+    .decorations {
+      font-size: 1.8rem;
+      margin-top: 15px;
+    }
 
-.gift-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 22px;
-}
+    .gift-grid {
+      width: min(1200px, 92%);
+      margin: 0 auto 50px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 22px;
+    }
 
-.gift-card {
-  overflow: hidden;
-  background: white;
-  border: 2px solid #f0e4d3;
-  border-radius: 18px;
-  box-shadow: 0 5px 15px #00000010;
-  transition: transform .2s;
-}
+    .gift-card {
+      background: #fff;
+      color: #24352b;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 5px 18px #0003;
+      transition: transform 0.2s;
+    }
 
-.gift-card:hover { transform: translateY(-4px); }
+    .gift-card:hover {
+      transform: translateY(-5px);
+    }
 
-.gift-image {
-  min-height: 145px;
-  display: grid;
-  place-items: center;
-  background: #fce8d5;
-  font-size: 4rem;
-}
+    .gift-image {
+      width: 100%;
+      height: 190px;
+      object-fit: contain;
+      background: #f5f5f5;
+      display: block;
+    }
 
-.gift-content { padding: 18px; }
+    .gift-placeholder {
+      height: 190px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+      font-size: 4rem;
+    }
 
-.rank {
-  color: #8a5b00;
-  background: #fff0bf;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: .8rem;
-  font-weight: bold;
-}
+    .gift-info {
+      padding: 18px;
+    }
 
-.gift-content h3 { color: #176b45; }
+    .gift-info h2 {
+      font-size: 1.15rem;
+      margin: 0;
+      text-align: center;
+    }
 
-.gift-content p { line-height: 1.5; }
-
-.gift-link {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 11px 15px;
-  color: white;
-  background: #bd2929;
-  border-radius: 9px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-footer {
-  margin-top: 45px;
-  padding: 25px;
-  color: white;
-  background: #176b45;
-  text-align: center;
-}
-</style>
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #e4f5e9;
+    }
+  </style>
 </head>
 
 <body>
+  <header>
+    <h1>🎄 Ma liste de Noël 🎁</h1>
+    <p>Quelques idées pour mettre un peu de magie sous le sapin !</p>
+    <div class="decorations">❄️ ⭐ 🎅 ⭐ ❄️</div>
+  </header>
 
-<header>
-  <h1>🎄 Ma liste de Noël 🎁</h1>
-  <p>Quelques idées pour un Noël magique !</p>
-  ⭐ 🎅 ❄️ 🎁
-</header>
-
-<main>
-  <section class="intro">
-    <h2>Ma sélection de cadeaux ✨</h2>
-    <p>Voici mes envies de Noël, classées par ordre de préférence !</p>
-  </section>
-
-  <section class="gift-grid">
+  <main class="gift-grid">
 
     <article class="gift-card">
-      <div class="gift-image">💪</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 1</span>
-        <h3>Banc de musculation DOMYOS</h3>
-        <p>Le modèle sélectionné chez Decathlon.</p>
-        <a class="gift-link" href="https://www.decathlon.fr/p/_/R-p-367264?mc=8948872" target="_blank" rel="noopener noreferrer">Voir le produit ↗</a>
-      </div>
+      <img class="gift-image" src="images/Banc_muscu_domyos.png" alt="Banc de musculation DOMYOS">
+      <div class="gift-info"><h2>Banc de musculation DOMYOS</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🎧</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 2</span>
-        <h3>Casque musique / sport</h3>
-        <p>Un casque pour écouter de la musique pendant le sport.</p>
-      </div>
+      <img class="gift-image" src="images/scarpa-drago-lv-chaussons-descalade.jpg" alt="Chaussons d'escalade Scarpa Drago LV">
+      <div class="gift-info"><h2>Chaussons d'escalade Scarpa Drago LV</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🎮</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 3</span>
-        <h3>Casque de jeu</h3>
-        <p>Un casque pour les sessions de gaming.</p>
-      </div>
+      <div class="gift-placeholder">🎧</div>
+      <div class="gift-info"><h2>Casque musique / sport</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🖱️</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 4</span>
-        <h3>Souris gaming</h3>
-        <p>Une souris dédiée au jeu vidéo.</p>
-      </div>
+      <div class="gift-placeholder">🎮</div>
+      <div class="gift-info"><h2>Casque de jeu</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">⌨️</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 5</span>
-        <h3>Clavier gaming</h3>
-        <p>Un clavier pour compléter mon setup.</p>
-      </div>
+      <div class="gift-placeholder">🖱️</div>
+      <div class="gift-info"><h2>Souris gaming</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">💾</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 6</span>
-        <h3>Disque dur NVMe 1 To</h3>
-        <p>Un stockage NVMe d'une capacité de 1 To.</p>
-      </div>
+      <div class="gift-placeholder">⌨️</div>
+      <div class="gift-info"><h2>Clavier gaming</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🎛️</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 7</span>
-        <h3>Stream Deck</h3>
-        <p>Un contrôleur avec des touches personnalisables.</p>
-      </div>
+      <div class="gift-placeholder">💾</div>
+      <div class="gift-info"><h2>Disque dur NVMe 1 To</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🔊</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 8</span>
-        <h3>Barre de son TV</h3>
-        <p>Pour améliorer le son de la télévision.</p>
-      </div>
+      <div class="gift-placeholder">🎛️</div>
+      <div class="gift-info"><h2>Stream Deck</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🍳</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 9</span>
-        <h3>Poêle en inox</h3>
-        <p>Une poêle en acier inoxydable.</p>
-      </div>
+      <img class="gift-image" src="images/barre_son.jpg" alt="Barre de son TV">
+      <div class="gift-info"><h2>Barre de son TV</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🍓</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 10</span>
-        <h3>Raspberry Pi 5 + chargeur</h3>
-        <p>Un Raspberry Pi 5 accompagné de son chargeur.</p>
-      </div>
+      <div class="gift-placeholder">🍳</div>
+      <div class="gift-info"><h2>Poêle en inox</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🔌</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 11</span>
-        <h3>ESP32</h3>
-        <p>Une carte de développement ESP32.</p>
-      </div>
+      <img class="gift-image" src="images/raspberry-pi-5.webp" alt="Raspberry Pi 5 avec chargeur">
+      <div class="gift-info"><h2>Raspberry Pi 5 + chargeur</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">📡</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 12</span>
-        <h3>Clé Zigbee Sonoff</h3>
-        <p>Une clé Zigbee de la marque Sonoff.</p>
-      </div>
+      <img class="gift-image" src="images/esp32.jpg" alt="Carte ESP32">
+      <div class="gift-info"><h2>ESP32</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">📟</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 13</span>
-        <h3>ESP32-C6 Touch LCD Board</h3>
-        <p>Une carte ESP32-C6 avec écran tactile LCD.</p>
-      </div>
+      <img class="gift-image" src="images/ESP32-C6_Touch_LCD_Board.jpg" alt="ESP32-C6 Touch LCD Board">
+      <div class="gift-info"><h2>ESP32-C6 Touch LCD Board</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">📱</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 14</span>
-        <h3>Tablette (pas Apple)</h3>
-        <p>Une tablette d'une autre marque qu'Apple.</p>
-      </div>
+      <img class="gift-image" src="images/SONOFF_ZIGBEE_USB.jpg" alt="Clé Zigbee Sonoff">
+      <div class="gift-info"><h2>Clé Zigbee Sonoff</h2></div>
     </article>
 
     <article class="gift-card">
-      <div class="gift-image">🧸</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 15</span>
-        <h3>Flipper Zero</h3>
-        <p>un multi-outil polyvalent.</p>
-      </div>
+      <img class="gift-image" src="images/OBD2.jpg" alt="Lecteur OBD">
+      <div class="gift-info"><h2>Lecteur OBD</h2></div>
     </article>
-    
+
     <article class="gift-card">
-      <div class="gift-image">🧸</div>
-      <div class="gift-content">
-        <span class="rank">Priorité 16</span>
-        <h3>Pyjama</h3>
-        <p>Un pyjama pour manger les chats.</p>
-      </div>
+      <div class="gift-placeholder">📱</div>
+      <div class="gift-info"><h2>Tablette (pas Apple)</h2></div>
     </article>
 
-  </section>
-</main>
+    <article class="gift-card">
+      <img class="gift-image" src="images/flipper_zero.jpg" alt="Flipper Zero">
+      <div class="gift-info"><h2>Flipper Zero</h2></div>
+    </article>
 
-<footer>
-  <p>🎄 Joyeux Noël et merci ! ❤️</p>
-</footer>
+    <article class="gift-card">
+      <img class="gift-image" src="images/pyjama.jpg" alt="Pyjama">
+      <div class="gift-info"><h2>Pyjama</h2></div>
+    </article>
 
+  </main>
+
+  <footer>
+    Fait avec ❤️ et un peu de magie de Noël
+  </footer>
 </body>
 </html>
