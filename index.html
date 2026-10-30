@@ -1,242 +1,256 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma liste de Noël 🎄</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ma liste de Noël 🎄</title>
+<style>
+* { box-sizing: border-box; }
 
-    <style>
-        :root {
-            --rouge: #c62828;
-            --vert: #176b45;
-            --fond: #fffaf0;
-            --texte: #302b2b;
-        }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #302b2b;
+  background: #fffaf0;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+header {
+  padding: 45px 20px;
+  text-align: center;
+  color: white;
+  background: linear-gradient(135deg, #bd2929, #176b45);
+}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: var(--texte);
-            background: var(--fond);
-        }
+header h1 { font-size: clamp(2rem, 6vw, 3rem); }
 
-        header {
-            padding: 45px 20px;
-            text-align: center;
-            color: white;
-            background: linear-gradient(135deg, var(--rouge), var(--vert));
-        }
+main {
+  width: min(1100px, 92%);
+  margin: 35px auto;
+}
 
-        header h1 {
-            font-size: clamp(2rem, 6vw, 3.5rem);
-        }
+.intro { text-align: center; margin-bottom: 30px; }
+.intro h2 { color: #176b45; }
 
-        header p {
-            font-size: 1.1rem;
-        }
+.gift-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
 
-        main {
-            width: min(1100px, 92%);
-            margin: 35px auto;
-        }
+.gift-card {
+  overflow: hidden;
+  background: white;
+  border: 2px solid #f0e4d3;
+  border-radius: 18px;
+  box-shadow: 0 5px 15px #00000010;
+  transition: transform .2s;
+}
 
-        .intro {
-            margin-bottom: 35px;
-            text-align: center;
-        }
+.gift-card:hover { transform: translateY(-4px); }
 
-        .intro h2 {
-            color: var(--vert);
-            font-size: 2rem;
-        }
+.gift-image {
+  min-height: 145px;
+  display: grid;
+  place-items: center;
+  background: #fce8d5;
+  font-size: 4rem;
+}
 
-        .gift-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
+.gift-content { padding: 18px; }
 
-        .gift-card {
-            overflow: hidden;
-            background: white;
-            border: 2px solid #f0e4d3;
-            border-radius: 18px;
-            box-shadow: 0 5px 15px #00000010;
-            transition: transform 0.2s;
-        }
+.rank {
+  color: #8a5b00;
+  background: #fff0bf;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: .8rem;
+  font-weight: bold;
+}
 
-        .gift-card:hover {
-            transform: translateY(-4px);
-        }
+.gift-content h3 { color: #176b45; }
 
-        .gift-image {
-            display: grid;
-            min-height: 180px;
-            place-items: center;
-            background: #fce8d5;
-            font-size: 5rem;
-        }
+.gift-content p { line-height: 1.5; }
 
-        .gift-content {
-            padding: 20px;
-        }
+.gift-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 11px 15px;
+  color: white;
+  background: #bd2929;
+  border-radius: 9px;
+  text-decoration: none;
+  font-weight: bold;
+}
 
-        .gift-content h3 {
-            color: var(--vert);
-        }
-
-        .gift-content p {
-            line-height: 1.6;
-        }
-
-        .priority {
-            display: inline-block;
-            padding: 6px 10px;
-            background: #fff0bf;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .gift-link {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 12px 16px;
-            color: white;
-            background: var(--rouge);
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .gift-link:hover {
-            background: #9e1e1e;
-        }
-
-        .note {
-            margin-top: 35px;
-            padding: 22px;
-            background: #e7f4e9;
-            border-radius: 14px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        footer {
-            margin-top: 50px;
-            padding: 25px;
-            color: white;
-            background: var(--vert);
-            text-align: center;
-        }
-
-        @media (max-width: 400px) {
-            .gift-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                transition: none !important;
-            }
-        }
-    </style>
+footer {
+  margin-top: 45px;
+  padding: 25px;
+  color: white;
+  background: #176b45;
+  text-align: center;
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        <h1>🎄 Ma liste de Noël 🎁</h1>
-        <p>Quelques idées pour un Noël plein de surprises !</p>
-        <div aria-hidden="true">🎅 🎁 ⭐ ❄️</div>
-    </header>
+<header>
+  <h1>🎄 Ma liste de Noël 🎁</h1>
+  <p>Quelques idées pour un Noël magique !</p>
+  ⭐ 🎅 ❄️ 🎁
+</header>
 
-    <main>
-        <section class="intro">
-            <h2>Ma sélection de cadeaux ✨</h2>
-            <p>
-                Voici quelques idées de cadeaux qui me feraient plaisir.
-                Merci de contribuer à la magie de Noël !
-            </p>
-        </section>
+<main>
+  <section class="intro">
+    <h2>Ma sélection de cadeaux ✨</h2>
+    <p>Voici mes envies de Noël, classées par ordre de préférence !</p>
+  </section>
 
-        <section class="gift-grid" aria-label="Liste des cadeaux">
+  <section class="gift-grid">
 
-            <!-- Cadeau numéro 1 -->
-            <article class="gift-card">
-                <div class="gift-image" aria-hidden="true">🎁</div>
+    <article class="gift-card">
+      <div class="gift-image">💪</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 1</span>
+        <h3>Banc de musculation DOMYOS</h3>
+        <p>Le modèle sélectionné chez Decathlon.</p>
+        <a class="gift-link" href="https://www.decathlon.fr/p/_/R-p-367264?mc=8948872" target="_blank" rel="noopener noreferrer">Voir le produit ↗</a>
+      </div>
+    </article>
 
-                <div class="gift-content">
-                    <span class="priority">⭐ Priorité 1</span>
-                    <h3>Exemple de cadeau</h3>
+    <article class="gift-card">
+      <div class="gift-image">🎧</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 2</span>
+        <h3>Casque musique / sport</h3>
+        <p>Un casque pour écouter de la musique pendant le sport.</p>
+      </div>
+    </article>
 
-                    <p>
-                        Remplace ce texte par la description du cadeau
-                        que tu souhaites recevoir.
-                    </p>
+    <article class="gift-card">
+      <div class="gift-image">🎮</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 3</span>
+        <h3>Casque de jeu</h3>
+        <p>Un casque pour les sessions de gaming.</p>
+      </div>
+    </article>
 
-                    <p>
-                        <strong>Caractéristiques :</strong>
-                        modèle, couleur ou référence à préciser.
-                    </p>
+    <article class="gift-card">
+      <div class="gift-image">🖱️</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 4</span>
+        <h3>Souris gaming</h3>
+        <p>Une souris dédiée au jeu vidéo.</p>
+      </div>
+    </article>
 
-                    <a
-                        class="gift-link"
-                        href="https://example.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Voir en boutique ↗
-                    </a>
-                </div>
-            </article>
+    <article class="gift-card">
+      <div class="gift-image">⌨️</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 5</span>
+        <h3>Clavier gaming</h3>
+        <p>Un clavier pour compléter mon setup.</p>
+      </div>
+    </article>
 
-            <!-- Cadeau numéro 2 -->
-            <article class="gift-card">
-                <div class="gift-image" aria-hidden="true">🤖</div>
+    <article class="gift-card">
+      <div class="gift-image">💾</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 6</span>
+        <h3>Disque dur NVMe 1 To</h3>
+        <p>Un stockage NVMe d'une capacité de 1 To.</p>
+      </div>
+    </article>
 
-                <div class="gift-content">
-                    <span class="priority">⭐ Priorité 2</span>
-                    <h3>Carte de développement ESP32</h3>
+    <article class="gift-card">
+      <div class="gift-image">🎛️</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 7</span>
+        <h3>Stream Deck</h3>
+        <p>Un contrôleur avec des touches personnalisables.</p>
+      </div>
+    </article>
 
-                    <p>
-                        Un composant électronique pour mes projets
-                        de programmation et de bricolage.
-                    </p>
+    <article class="gift-card">
+      <div class="gift-image">🔊</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 8</span>
+        <h3>Barre de son TV</h3>
+        <p>Pour améliorer le son de la télévision.</p>
+      </div>
+    </article>
 
-                    <p>
-                        <strong>Caractéristiques :</strong>
-                        modèle exact à préciser.
-                    </p>
+    <article class="gift-card">
+      <div class="gift-image">🍳</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 9</span>
+        <h3>Poêle en inox</h3>
+        <p>Une poêle en acier inoxydable.</p>
+      </div>
+    </article>
 
-                    <a
-                        class="gift-link"
-                        href="https://example.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Voir en boutique ↗
-                    </a>
-                </div>
-            </article>
+    <article class="gift-card">
+      <div class="gift-image">🍓</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 10</span>
+        <h3>Raspberry Pi 5 + chargeur</h3>
+        <p>Un Raspberry Pi 5 accompagné de son chargeur.</p>
+      </div>
+    </article>
 
-        </section>
+    <article class="gift-card">
+      <div class="gift-image">🔌</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 11</span>
+        <h3>ESP32</h3>
+        <p>Une carte de développement ESP32.</p>
+      </div>
+    </article>
 
-        <section class="note">
-            🎄 <strong>Merci et joyeux Noël !</strong>
-            <br>
-            Cette liste est en cours de préparation.
-        </section>
-    </main>
+    <article class="gift-card">
+      <div class="gift-image">📡</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 12</span>
+        <h3>Clé Zigbee Sonoff</h3>
+        <p>Une clé Zigbee de la marque Sonoff.</p>
+      </div>
+    </article>
 
-    <footer>
-        <p>Fait avec ❤️ et un peu de magie de Noël ✨</p>
-    </footer>
+    <article class="gift-card">
+      <div class="gift-image">📟</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 13</span>
+        <h3>ESP32-C6 Touch LCD Board</h3>
+        <p>Une carte ESP32-C6 avec écran tactile LCD.</p>
+      </div>
+    </article>
+
+    <article class="gift-card">
+      <div class="gift-image">📱</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 14</span>
+        <h3>Tablette (pas Apple)</h3>
+        <p>Une tablette d'une autre marque qu'Apple.</p>
+      </div>
+    </article>
+
+    <article class="gift-card">
+      <div class="gift-image">🧸</div>
+      <div class="gift-content">
+        <span class="rank">Priorité 15</span>
+        <h3>Pyjama</h3>
+        <p>Un pyjama pour Noël.</p>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+<footer>
+  <p>🎄 Joyeux Noël et merci ! ❤️</p>
+</footer>
 
 </body>
 </html>
