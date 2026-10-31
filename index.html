@@ -1,80 +1,136 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ma liste de Noël 🎄</title>
+
   <style>
-   
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background:
-        radial-gradient(circle at 15% 15%, #a83232 0, transparent 35%),
-        radial-gradient(circle at 85% 80%, #245c3b 0, transparent 40%),
-        linear-gradient(135deg, #681b27, #123d2b);
       color: #fff;
       min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 15% 15%, #a52a36, transparent 40%),
+        radial-gradient(ellipse at 85% 75%, #23603b, transparent 45%),
+        linear-gradient(135deg, #761c2a, #123d2b);
     }
 
     header {
       text-align: center;
-      padding: 45px 20px 30px;
+      padding: 65px 20px 35px;
+      position: relative;
     }
 
     header h1 {
       font-size: clamp(2rem, 6vw, 3.5rem);
       margin: 0 0 12px;
-      color: #f6d77a;
-      text-shadow: 0 2px 8px #0008;
+      color: #ffe6a0;
+      text-shadow: 0 3px 8px #0008;
     }
 
     header p {
       font-size: 1.1rem;
-      color: #fff2d0;
+      color: #fff;
     }
 
     .decorations {
-      font-size: 1.8rem;
-      margin-top: 15px;
-      color: #f6d77a;
-      text-shadow: 0 0 12px #f6d77a88;
-      letter-spacing: 8px;
+      font-size: 2rem;
+      margin-top: 18px;
+      letter-spacing: 12px;
+      text-shadow: 0 0 12px #ffdf80;
     }
 
+    /* Boules suspendues */
+    .baubles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .bauble {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: inset -7px -5px 10px #0005,
+                  inset 5px 5px 10px #fff6,
+                  0 3px 10px #0005;
+    }
+
+    .bauble::before {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 55px;
+      background: #d8b65d;
+      bottom: 100%;
+      left: 50%;
+    }
+
+    .bauble:nth-child(1) { background: #c72c3b; margin-top: 55px; }
+    .bauble:nth-child(2) { background: #e8bd50; margin-top: 85px; }
+    .bauble:nth-child(3) { background: #236d43; margin-top: 45px; }
+    .bauble:nth-child(4) { background: #c72c3b; margin-top: 95px; }
+    .bauble:nth-child(5) { background: #e8bd50; margin-top: 60px; }
+    .bauble:nth-child(6) { background: #236d43; margin-top: 80px; }
+
+    /* Décorations sur les côtés */
+    .side-decoration {
+      position: fixed;
+      top: 35%;
+      font-size: 3rem;
+      line-height: 1.8;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 0;
+      text-shadow: 0 2px 8px #0006;
+    }
+
+    .left-decoration { left: 8px; }
+    .right-decoration { right: 8px; }
+
     .gift-grid {
-      width: min(1200px, 92%);
+      width: min(1200px, 90%);
       margin: 0 auto 50px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 22px;
+      position: relative;
+      z-index: 1;
     }
 
+    /* Cartes cadeaux blanches et texte noir */
     .gift-card {
-      background: linear-gradient(145deg, #fffdf5, #f5ead1);
-      color: #24352b;
-      border: 2px solid #d6ad50;
-      border-radius: 16px;
+      background: #fff;
+      color: #111;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 5px 18px #0005, 0 0 12px #e8c66b33;
+      border: 2px solid #f1d58b;
+      box-shadow: 0 5px 18px #0004;
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .gift-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 9px 24px #0006, 0 0 16px #f6d77a88;
+      box-shadow: 0 9px 24px #0006;
     }
 
     .gift-image {
       width: 100%;
       height: 190px;
       object-fit: contain;
-      background: #fffdf7;
+      background: #fff;
       display: block;
-      border-bottom: 1px solid #e4d3a5;
     }
 
     .gift-placeholder {
@@ -82,37 +138,73 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #fffdf7, #f0e3c2);
+      background: #fff;
       font-size: 4rem;
-      border-bottom: 1px solid #e4d3a5;
     }
 
     .gift-info {
       padding: 18px;
+      background: #fff;
     }
 
     .gift-info h2 {
       font-size: 1.15rem;
       margin: 0;
       text-align: center;
-      color: #285238;
+      color: #111;
     }
 
     footer {
       text-align: center;
       padding: 25px;
-      color: #f6d77a;
-      text-shadow: 0 1px 5px #0008;
+      color: #ffe6a0;
+      position: relative;
+      z-index: 1;
     }
-</style>
+
+    .stars {
+      text-align: center;
+      font-size: 1.5rem;
+      letter-spacing: 14px;
+      color: #ffdf80;
+      padding: 10px;
+      text-shadow: 0 0 12px #ffdf80;
+    }
+
+    @media (max-width: 600px) {
+      .side-decoration { font-size: 1.8rem; opacity: 0.45; }
+      .bauble { width: 24px; height: 24px; }
+      .gift-grid { width: 92%; }
+    }
+  </style>
 </head>
 
 <body>
+
+  <div class="baubles">
+    <div class="bauble"></div>
+    <div class="bauble"></div>
+    <div class="bauble"></div>
+    <div class="bauble"></div>
+    <div class="bauble"></div>
+    <div class="bauble"></div>
+  </div>
+
+  <div class="side-decoration left-decoration">
+    🎄<br>⭐<br>🎁
+  </div>
+
+  <div class="side-decoration right-decoration">
+    🎁<br>⭐<br>🎄
+  </div>
+
   <header>
     <h1>🎄 Ma liste de Noël 🎁</h1>
     <p>Quelques idées pour mettre un peu de magie sous le sapin !</p>
     <div class="decorations">❄️ ⭐ 🎅 ⭐ ❄️</div>
   </header>
+
+  <div class="stars">✦ ★ ✧ ★ ✦</div>
 
   <main class="gift-grid">
 
@@ -208,8 +300,11 @@
 
   </main>
 
+  <div class="stars">✧ ★ ✦ ★ ✧</div>
+
   <footer>
     Fait avec ❤️ et un peu de magie de Noël
   </footer>
+
 </body>
 </html>
