@@ -206,7 +206,70 @@
 
   <div class="stars">✦ ★ ✧ ★ ✦</div>
 
-  <main class="gift-grid">
+<section id="login-section" style="
+  max-width: 420px;
+  margin: 20px auto 40px;
+  padding: 25px;
+  background: white;
+  color: #111;
+  border: 2px solid #f1d58b;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+">
+  <h2>🎁 Accès à ma liste de Noël</h2>
+  <p>Entre ton code personnel pour découvrir la liste.</p>
+
+  <input
+    id="access-code"
+    type="password"
+    placeholder="Ton code personnel"
+    autocomplete="off"
+    style="
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    "
+  >
+
+  <button
+    id="login-button"
+    type="button"
+    style="
+      width: 100%;
+      padding: 12px;
+      background: #23603b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    "
+  >
+    Accéder à la liste
+  </button>
+
+  <p id="login-message" style="color: #b00020;"></p>
+</section>
+
+<div id="user-section" style="
+  display: none;
+  text-align: center;
+  margin: 20px auto;
+  position: relative;
+  z-index: 2;
+">
+  <p id="welcome-message"></p>
+  <button id="logout-button" type="button">
+    Se déconnecter
+  </button>
+</div>
+  
+  <main class="gift-grid" id="gift-grid" style="display: none;">
 
     <article class="gift-card">
       <a href="https://www.decathlon.fr/p/banc-de-musculation-pliable-inclinable-et-declinable-bench-500/367264/c1m8948872" target="_blank" rel="noopener noreferrer">
