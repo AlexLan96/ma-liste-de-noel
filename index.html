@@ -45,7 +45,6 @@
       text-shadow: 0 0 12px #ffdf80;
     }
 
-    /* Boules suspendues */
     .baubles {
       position: absolute;
       top: 0;
@@ -84,7 +83,6 @@
     .bauble:nth-child(5) { background: #e8bd50; margin-top: 60px; }
     .bauble:nth-child(6) { background: #236d43; margin-top: 80px; }
 
-    /* Décorations sur les côtés */
     .side-decoration {
       position: fixed;
       top: 35%;
@@ -109,7 +107,6 @@
       z-index: 1;
     }
 
-    /* Cartes cadeaux blanches et texte noir */
     .gift-card {
       background: #fff;
       color: #111;
@@ -154,14 +151,6 @@
       color: #111;
     }
 
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #ffe6a0;
-      position: relative;
-      z-index: 1;
-    }
-
     .stars {
       text-align: center;
       font-size: 1.5rem;
@@ -171,10 +160,90 @@
       text-shadow: 0 0 12px #ffdf80;
     }
 
+    .reservation-info {
+      margin-top: 15px;
+      padding-top: 12px;
+      border-top: 1px solid #ead9b5;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .reservation-info p {
+      color: #23603b;
+      margin: 8px 0;
+    }
+
+    .reserve-button,
+    .cancel-button {
+      border: none;
+      border-radius: 6px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    .reserve-button {
+      background: #23603b;
+      color: white;
+      width: 100%;
+    }
+
+    .reserve-button:hover { background: #17452a; }
+
+    .reserve-button:disabled,
+    .cancel-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .reservation-panel {
+      width: min(800px, 90%);
+      margin: 20px auto 35px;
+      padding: 20px;
+      background: white;
+      color: #111;
+      border: 2px solid #f1d58b;
+      border-radius: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .reservation-panel h2 {
+      text-align: center;
+      color: #23603b;
+    }
+
+    .my-reservation-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #ead9b5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cancel-button {
+      background: #a52a36;
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #ffe6a0;
+      position: relative;
+      z-index: 1;
+    }
+
     @media (max-width: 600px) {
       .side-decoration { font-size: 1.8rem; opacity: 0.45; }
       .bauble { width: 24px; height: 24px; }
       .gift-grid { width: 92%; }
+      .my-reservation-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -206,84 +275,87 @@
 
   <div class="stars">✦ ★ ✧ ★ ✦</div>
 
-<section id="login-section" style="
-  max-width: 420px;
-  margin: 20px auto 40px;
-  padding: 25px;
-  background: white;
-  color: #111;
-  border: 2px solid #f1d58b;
-  border-radius: 12px;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-">
-  <h2>🎁 Accès à ma liste de Noël</h2>
-  <p>Entre ton code personnel pour découvrir la liste.</p>
+  <section id="login-section" style="
+    max-width: 420px;
+    margin: 20px auto 40px;
+    padding: 25px;
+    background: white;
+    color: #111;
+    border: 2px solid #f1d58b;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  ">
+    <h2>🎁 Accès à ma liste de Noël</h2>
+    <p>Entre ton code personnel pour découvrir la liste.</p>
 
-  <input
-    id="access-code"
-    type="password"
-    placeholder="Ton code personnel"
-    autocomplete="off"
-    style="
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    "
-  >
+    <input
+      id="access-code"
+      type="password"
+      placeholder="Ton code personnel"
+      autocomplete="off"
+      style="
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+      "
+    >
 
-  <button
-    id="login-button"
-    type="button"
-    style="
-      width: 100%;
-      padding: 12px;
-      background: #23603b;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    "
-  >
-    Accéder à la liste
-  </button>
+    <button
+      id="login-button"
+      type="button"
+      style="
+        width: 100%;
+        padding: 12px;
+        background: #23603b;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+      "
+    >
+      Accéder à la liste
+    </button>
 
-  <p id="login-message" style="color: #b00020;"></p>
-</section>
+    <p id="login-message" style="color: #b00020;"></p>
+  </section>
 
-<div id="user-section" style="
-  display: none;
-  text-align: center;
-  margin: 20px auto;
-  position: relative;
-  z-index: 2;
-">
-  <p id="welcome-message"></p>
-  <button id="logout-button" type="button">
-    Se déconnecter
-  </button>
-</div>
-  
+  <div id="user-section" style="
+    display: none;
+    text-align: center;
+    margin: 20px auto;
+    position: relative;
+    z-index: 2;
+  ">
+    <p id="welcome-message"></p>
+    <button id="logout-button" type="button">Se déconnecter</button>
+  </div>
+
+  <section id="my-reservations-section" class="reservation-panel" style="display: none;">
+    <h2>🎁 Mes réservations</h2>
+    <div id="my-reservations-list">Chargement...</div>
+  </section>
+
   <main class="gift-grid" id="gift-grid" style="display: none;">
 
     <article class="gift-card">
       <a href="https://www.decathlon.fr/p/banc-de-musculation-pliable-inclinable-et-declinable-bench-500/367264/c1m8948872" target="_blank" rel="noopener noreferrer">
-    <img class="gift-image" src="images/Banc_muscu_domyos.png" alt="Banc de musculation DOMYOS">
-  </a>
-  <div class="gift-info">
-    <h2>
-      <a href="https://www.decathlon.fr/p/banc-de-musculation-pliable-inclinable-et-declinable-bench-500/367264/c1m8948872" target="_blank" rel="noopener noreferrer" style="color: #111; text-decoration: none;">
-        Banc de musculation DOMYOS
+        <img class="gift-image" src="images/Banc_muscu_domyos.png" alt="Banc de musculation DOMYOS">
       </a>
-    </h2>
-  </div>
+      <div class="gift-info">
+        <h2>
+          <a href="https://www.decathlon.fr/p/banc-de-musculation-pliable-inclinable-et-declinable-bench-500/367264/c1m8948872" target="_blank" rel="noopener noreferrer" style="color: #111; text-decoration: none;">
+            Banc de musculation DOMYOS
+          </a>
+        </h2>
+      </div>
     </article>
-    
+
     <article class="gift-card">
       <img class="gift-image" src="images/toyota_hilux.jpg" alt="Toyota HILUX double cabine">
       <div class="gift-info"><h2>Toyota HILUX double cabine</h2></div>
@@ -323,7 +395,7 @@
       <img class="gift-image" src="images/Haut_parleurs.jpg" alt="Haut parleurs">
       <div class="gift-info"><h2>Haut parleurs</h2></div>
     </article>
-    
+
     <article class="gift-card">
       <img class="gift-image" src="images/disque_nvme.jpg" alt="Disque dur NVMe 2280">
       <div class="gift-info"><h2>Disque dur NVMe 2280</h2></div>
@@ -353,12 +425,12 @@
       <img class="gift-image" src="images/raspberry_pi_4.webp" alt="Raspberry Pi 4 avec chargeur">
       <div class="gift-info"><h2>Raspberry Pi 4 + chargeur</h2></div>
     </article>
-    
+
     <article class="gift-card">
       <img class="gift-image" src="images/ecran_raspberry.jpg" alt="Ecran pour Raspberry">
       <div class="gift-info"><h2>Ecran pour Raspberry</h2></div>
     </article>
-    
+
     <article class="gift-card">
       <img class="gift-image" src="images/esp32.jpg" alt="Carte ESP32">
       <div class="gift-info"><h2>ESP32(USN-C)</h2></div>
@@ -401,153 +473,279 @@
   <footer>
     Fait avec ❤️ et un peu de magie de Noël
   </footer>
-<script>
-const SUPABASE_URL = "https://wvtjyusstahvtihmmrlq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Y-kzecPom_Qjcu5cQ9oppw_gIUcv8OV";
 
-const loginSection = document.getElementById("login-section");
-const giftGrid = document.getElementById("gift-grid");
-const userSection = document.getElementById("user-section");
-const loginButton = document.getElementById("login-button");
-const accessCodeInput = document.getElementById("access-code");
-const loginMessage = document.getElementById("login-message");
+  <script>
+    const SUPABASE_URL = "https://wvtjyusstahvtihmmrlq.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Y-kzecPom_Qjcu5cQ9oppw_gIUcv8OV";
 
-let sessionToken = sessionStorage.getItem("noel_session_token");
-// Génération automatique des identifiants des cadeaux
-function generateGiftIds() {
-  const cards = document.querySelectorAll(".gift-card");
+    const loginSection = document.getElementById("login-section");
+    const giftGrid = document.getElementById("gift-grid");
+    const userSection = document.getElementById("user-section");
+    const loginButton = document.getElementById("login-button");
+    const accessCodeInput = document.getElementById("access-code");
+    const loginMessage = document.getElementById("login-message");
+    const myReservationsSection = document.getElementById("my-reservations-section");
+    const myReservationsList = document.getElementById("my-reservations-list");
 
-  cards.forEach((card) => {
-    const title = card.querySelector(".gift-info h2");
+    let sessionToken = sessionStorage.getItem("noel_session_token");
 
-    if (!title) return;
+    function generateGiftIds() {
+      const cards = document.querySelectorAll(".gift-card");
 
-    const giftName = title.textContent.trim();
+      cards.forEach((card) => {
+        const title = card.querySelector(".gift-info h2");
+        if (!title) return;
 
-    const giftId = giftName
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
+        const giftName = title.textContent.trim();
 
-    card.dataset.giftId = giftId;
-  });
-}
+        const giftId = giftName
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
 
-generateGiftIds();
-  console.table(
-  [...document.querySelectorAll(".gift-card")].map(card => ({
-    cadeau: card.querySelector(".gift-info h2")?.textContent,
-    identifiant: card.dataset.giftId
-  }))
-);
-async function callFunction(functionName, data) {
-  const response = await fetch(
-    `${SUPABASE_URL}/functions/v1/${functionName}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_KEY
-      },
-      body: JSON.stringify(data)
+        card.dataset.giftId = giftId;
+      });
     }
-  );
 
-  const result = await response.json();
+    generateGiftIds();
 
-  if (!response.ok) {
-    throw new Error(result.error || "Une erreur est survenue.");
-  }
+    async function callFunction(functionName, data) {
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/${functionName}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+          },
+          body: JSON.stringify(data)
+        }
+      );
 
-  return result;
-}
+      const result = await response.json();
 
-function showConnectedUser(name) {
-  loginSection.style.display = "none";
-  giftGrid.style.display = "grid";
-  userSection.style.display = "block";
+      if (!response.ok) {
+        throw new Error(result.error || "Une erreur est survenue.");
+      }
 
-  document.getElementById("welcome-message").textContent =
-    "Bienvenue " + name + " ! 🎄";
-}
+      return result;
+    }
 
-function showLogin() {
-  sessionToken = null;
-  sessionStorage.removeItem("noel_session_token");
+    function showConnectedUser(name) {
+      loginSection.style.display = "none";
+      giftGrid.style.display = "grid";
+      userSection.style.display = "block";
+      myReservationsSection.style.display = "block";
 
-  loginSection.style.display = "block";
-  giftGrid.style.display = "none";
-  userSection.style.display = "none";
-}
+      document.getElementById("welcome-message").textContent =
+        "Bienvenue " + name + " ! 🎄";
 
-async function login() {
-  const code = accessCodeInput.value.trim();
+      refreshReservations();
+    }
 
-  if (!code) {
-    loginMessage.textContent = "Merci de saisir ton code personnel.";
-    return;
-  }
+    async function refreshReservations() {
+      myReservationsList.textContent = "Chargement des réservations...";
 
-  loginButton.disabled = true;
-  loginMessage.textContent = "Vérification en cours...";
+      try {
+        const [allData, myData] = await Promise.all([
+          callFunction("gift-reservations", { token: sessionToken }),
+          callFunction("my-reservations", { token: sessionToken })
+        ]);
 
-  try {
-    const result = await callFunction("verify-access-code", { code });
+        const allReservations = allData.reservations || [];
+        const myReservations = myData.reservations || [];
 
-    sessionToken = result.token;
-    sessionStorage.setItem("noel_session_token", sessionToken);
+        // Mettre à jour les informations et boutons de chaque cadeau.
+        document.querySelectorAll(".gift-card").forEach(card => {
+          const giftId = card.dataset.giftId;
+          const giftInfo = card.querySelector(".gift-info");
 
-    showConnectedUser(result.name);
-    loginMessage.textContent = "";
-    accessCodeInput.value = "";
+          let area = giftInfo.querySelector(".reservation-info");
 
-  } catch (error) {
-    loginMessage.textContent = error.message === "Code incorrect"
-      ? "Code incorrect. Vérifie ta saisie."
-      : error.message;
-  } finally {
-    loginButton.disabled = false;
-  }
-}
+          if (!area) {
+            area = document.createElement("div");
+            area.className = "reservation-info";
+            giftInfo.appendChild(area);
+          }
 
-async function restoreSession() {
-  if (!sessionToken) {
-    showLogin();
-    return;
-  }
+          area.replaceChildren();
 
-  try {
-    const result = await callFunction("verify-session", {
-      token: sessionToken
+          const reservations = allReservations.filter(
+            reservation => reservation.gift_id === giftId
+          );
+
+          const names = [...new Set(
+            reservations.map(reservation => reservation.person_name)
+          )];
+
+          const info = document.createElement("p");
+          info.textContent = names.length
+            ? "Réservé par : " + names.join(", ")
+            : "Personne n'a encore réservé ce cadeau.";
+
+          area.appendChild(info);
+
+          const reserveButton = document.createElement("button");
+          reserveButton.type = "button";
+          reserveButton.className = "reserve-button";
+          reserveButton.textContent = "Réserver ce cadeau";
+
+          reserveButton.addEventListener("click", async () => {
+            reserveButton.disabled = true;
+            reserveButton.textContent = "Enregistrement...";
+
+            try {
+              await callFunction("reserve-gift", {
+                token: sessionToken,
+                gift_id: giftId
+              });
+
+              await refreshReservations();
+            } catch (error) {
+              alert("Impossible d'enregistrer la réservation : " + error.message);
+              reserveButton.disabled = false;
+              reserveButton.textContent = "Réserver ce cadeau";
+            }
+          });
+
+          area.appendChild(reserveButton);
+        });
+
+        // N'afficher ici que les réservations du compte connecté.
+        myReservationsList.replaceChildren();
+
+        if (myReservations.length === 0) {
+          myReservationsList.textContent =
+            "Tu n'as pas encore réservé de cadeau.";
+          return;
+        }
+
+        myReservations.forEach(reservation => {
+          const card = [...document.querySelectorAll(".gift-card")].find(
+            item => item.dataset.giftId === reservation.gift_id
+          );
+
+          const giftName = card
+            ? card.querySelector(".gift-info h2").textContent.trim()
+            : reservation.gift_id;
+
+          const item = document.createElement("div");
+          item.className = "my-reservation-item";
+
+          const name = document.createElement("span");
+          name.textContent = "🎁 " + giftName;
+
+          const cancelButton = document.createElement("button");
+          cancelButton.type = "button";
+          cancelButton.className = "cancel-button";
+          cancelButton.textContent = "Annuler ma réservation";
+
+          cancelButton.addEventListener("click", async () => {
+            if (!confirm("Veux-tu vraiment annuler cette réservation ?")) {
+              return;
+            }
+
+            cancelButton.disabled = true;
+            cancelButton.textContent = "Annulation...";
+
+            try {
+              await callFunction("cancel-reservation", {
+                token: sessionToken,
+                reservation_id: reservation.id
+              });
+
+              await refreshReservations();
+            } catch (error) {
+              alert("Impossible d'annuler : " + error.message);
+              cancelButton.disabled = false;
+              cancelButton.textContent = "Annuler ma réservation";
+            }
+          });
+
+          item.appendChild(name);
+          item.appendChild(cancelButton);
+          myReservationsList.appendChild(item);
+        });
+
+      } catch (error) {
+        myReservationsList.textContent =
+          "Erreur lors du chargement des réservations : " + error.message;
+        console.error("Erreur de chargement des réservations :", error);
+      }
+    }
+
+    function showLogin() {
+      sessionToken = null;
+      sessionStorage.removeItem("noel_session_token");
+
+      loginSection.style.display = "block";
+      giftGrid.style.display = "none";
+      userSection.style.display = "none";
+      myReservationsSection.style.display = "none";
+    }
+
+    async function login() {
+      const code = accessCodeInput.value.trim();
+
+      if (!code) {
+        loginMessage.textContent = "Merci de saisir ton code personnel.";
+        return;
+      }
+
+      loginButton.disabled = true;
+      loginMessage.textContent = "Vérification en cours...";
+
+      try {
+        const result = await callFunction("verify-access-code", { code });
+
+        sessionToken = result.token;
+        sessionStorage.setItem("noel_session_token", sessionToken);
+
+        showConnectedUser(result.name);
+        loginMessage.textContent = "";
+        accessCodeInput.value = "";
+
+      } catch (error) {
+        loginMessage.textContent = error.message === "Code incorrect"
+          ? "Code incorrect. Vérifie ta saisie."
+          : error.message;
+      } finally {
+        loginButton.disabled = false;
+      }
+    }
+
+    async function restoreSession() {
+      if (!sessionToken) {
+        showLogin();
+        return;
+      }
+
+      try {
+        const result = await callFunction("verify-session", {
+          token: sessionToken
+        });
+
+        showConnectedUser(result.name);
+      } catch (error) {
+        showLogin();
+      }
+    }
+
+    loginButton.addEventListener("click", login);
+
+    accessCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") login();
     });
 
-    showConnectedUser(result.name);
+    document.getElementById("logout-button").addEventListener("click", () => {
+      showLogin();
+      accessCodeInput.value = "";
+      loginMessage.textContent = "";
+    });
 
-  } catch (error) {
-    showLogin();
-  }
-}
-
-loginButton.addEventListener("click", login);
-
-accessCodeInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    login();
-  }
-});
-
-document.getElementById("logout-button").addEventListener("click", () => {
-  showLogin();
-  accessCodeInput.value = "";
-  loginMessage.textContent = "";
-});
-
-restoreSession();
-</script>
+    restoreSession();
+  </script>
 </body>
-  
-
-
 </html>
