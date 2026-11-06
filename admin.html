@@ -91,4 +91,395 @@ button {
   margin-bottom: 15px;
 }
 
-.checkbox
+.checkbox input {
+  width: auto;
+  margin: 0;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🎄 Administration de ma liste de Noël</h1>
+
+<div id="message"></div>
+
+<!-- CONNEXION -->
+<section id="login" class="panel">
+  <h2>Connexion administrateur</h2>
+
+  <label>Adresse e-mail</label>
+  <input id="email" type="email" autocomplete="username">
+
+  <label>Mot de passe</label>
+  <input id="password" type="password" autocomplete="current-password">
+
+  <button class="primary" id="loginButton">Se connecter</button>
+</section>
+
+<!-- ADMINISTRATION -->
+<section id="app">
+
+  <div class="panel">
+    <h2>🎁 Ajouter un cadeau</h2>
+
+    <form id="giftForm">
+
+      <label>Nom du cadeau *</label>
+      <input id="title" required maxlength="200">
+
+      <label>Description</label>
+      <textarea id="description" rows="3"></textarea>
+
+      <label>Prix</label>
+      <input id="price" type="number" min="0" step="0.01">
+
+      <label>Lien du produit</label>
+      <input id="url" type="url">
+
+      <label>URL de l'image</label>
+      <input id="image_url" type="url">
+
+      <label class="checkbox">
+        <input id="allow_multiple" type="checkbox">
+        Autoriser plusieurs réservations
+      </label>
+
+      <button class="primary" type="submit">
+        Ajouter le cadeau
+      </button>
+
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>📋 Mes cadeaux</h2>
+    <div id="giftList">Chargement...</div>
+  </div>
+
+  <button class="secondary" id="logoutButton">
+    Se déconnecter
+  </button>
+
+</section>
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://wvtjyusstahvtihmmrlq.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_Y-kzecPom_Qjcu5cQ9oppw_gIUcv8OV";
+
+const ADMIN_ID =
+"00276736-BEDE-499C-9504-9B1DE789311D";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const loginSection = document.getElementById("login");
+const app = document.getElementById("app");
+const message = document.getElementById("message");
+const giftList = document.getElementById("giftList");
+
+let gifts = [];
+
+function notify(text, error = false) {
+  message.textContent = text;
+  message.style.color = error ? "#b00020" : "#23603b";
+}
+
+async function checkUser() {
+  const { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user || user.id.toLowerCase() !== ADMIN_ID.toLowerCase()) {
+    app.style.display = "none";
+    loginSection.style.display = "block";
+
+    if (user) {
+      notify("Ce compte n'est pas autorisé à administrer les cadeaux.", true);
+    }
+
+    return false;
+  }
+
+  loginSection.style.display = "none";
+  app.style.display = "block";
+
+  await loadGifts();
+  return true;
+}
+
+document.getElementById("loginButton").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    notify("Merci de remplir les deux champs.", true);
+    return;
+  }
+
+  notify("Connexion en cours...");
+
+  const { error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    notify("Erreur de connexion : " + error.message, true);
+    return;
+  }
+
+  await checkUser();
+});
+
+document.getElementById("logoutButton").addEventListener("click", async () => {
+  await db.auth.signOut();
+  app.style.display = "none";
+  loginSection.style.display = "block";
+  notify("Déconnexion effectuée.");
+});
+
+async function loadGifts() {
+  giftList.textContent = "Chargement des cadeaux...";
+
+  const { data, error } = await db
+    .from("gifts")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    notify("Impossible de charger les cadeaux : " + error.message, true);
+    giftList.textContent = "";
+    return;
+  }
+
+  gifts = data || [];
+  renderGifts();
+}
+
+function renderGifts() {
+  giftList.replaceChildren();
+
+  if (gifts.length === 0) {
+    giftList.textContent = "Aucun cadeau enregistré dans Supabase.";
+    return;
+  }
+
+  gifts.forEach((gift, index) => {
+    const card = document.createElement("div");
+    card.className = "gift";
+
+    const title = document.createElement("h3");
+    title.textContent = "🎁 " + gift.title;
+
+    const details = document.createElement("p");
+    details.textContent =
+      "Prix : " + (gift.price ?? "Non renseigné") +
+      " | Ordre : " + gift.sort_order +
+      " | Réservations multiples : " +
+      (gift.allow_multiple ? "Oui" : "Non");
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const up = document.createElement("button");
+    up.className = "secondary";
+    up.textContent = "⬆️";
+    up.disabled = index === 0;
+    up.title = "Monter";
+    up.addEventListener("click", () => moveGift(index, -1));
+
+    const down = document.createElement("button");
+    down.className = "secondary";
+    down.textContent = "⬇️";
+    down.disabled = index === gifts.length - 1;
+    down.title = "Descendre";
+    down.addEventListener("click", () => moveGift(index, 1));
+
+    const edit = document.createElement("button");
+    edit.className = "primary";
+    edit.textContent = "Modifier";
+    edit.addEventListener("click", () => editGift(gift));
+
+    const remove = document.createElement("button");
+    remove.className = "danger";
+    remove.textContent = "Supprimer";
+    remove.addEventListener("click", () => deleteGift(gift));
+
+    actions.append(up, down, edit, remove);
+    card.append(title, details, actions);
+    giftList.appendChild(card);
+  });
+}
+
+document.getElementById("giftForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const title = document.getElementById("title").value.trim();
+
+  if (!title) {
+    notify("Le nom du cadeau est obligatoire.", true);
+    return;
+  }
+
+  if (!await checkAdmin()) return;
+
+  const maxOrder = gifts.reduce(
+    (max, gift) => Math.max(max, Number(gift.sort_order) || 0),
+    0
+  );
+
+  const gift = {
+    title,
+    description: document.getElementById("description").value.trim(),
+    price: document.getElementById("price").value || null,
+    url: document.getElementById("url").value.trim() || null,
+    image_url: document.getElementById("image_url").value.trim() || null,
+    allow_multiple: document.getElementById("allow_multiple").checked,
+    sort_order: maxOrder + 1
+  };
+
+  const { error } = await db.from("gifts").insert(gift);
+
+  if (error) {
+    notify("Erreur lors de l'ajout : " + error.message, true);
+    return;
+  }
+
+  document.getElementById("giftForm").reset();
+  notify("Cadeau ajouté !");
+  await loadGifts();
+});
+
+async function checkAdmin() {
+  const { data: { user } } = await db.auth.getUser();
+
+  if (!user || user.id.toLowerCase() !== ADMIN_ID.toLowerCase()) {
+    notify("Accès administrateur refusé.", true);
+    return false;
+  }
+
+  return true;
+}
+
+async function editGift(gift) {
+  if (!await checkAdmin()) return;
+
+  const title = prompt("Nom du cadeau :", gift.title);
+  if (title === null) return;
+
+  if (!title.trim()) {
+    notify("Le nom ne peut pas être vide.", true);
+    return;
+  }
+
+  const description = prompt("Description :", gift.description || "");
+  if (description === null) return;
+
+  const price = prompt("Prix :", gift.price ?? "");
+  if (price === null) return;
+
+  const url = prompt("Lien du produit :", gift.url || "");
+  if (url === null) return;
+
+  const image_url = prompt("URL de l'image :", gift.image_url || "");
+  if (image_url === null) return;
+
+  const { error } = await db
+    .from("gifts")
+    .update({
+      title: title.trim(),
+      description: description.trim(),
+      price: price.trim() || null,
+      url: url.trim() || null,
+      image_url: image_url.trim() || null
+    })
+    .eq("id", gift.id);
+
+  if (error) {
+    notify("Erreur de modification : " + error.message, true);
+    return;
+  }
+
+  notify("Cadeau modifié !");
+  await loadGifts();
+}
+
+async function deleteGift(gift) {
+  if (!await checkAdmin()) return;
+
+  if (!confirm("Supprimer définitivement « " + gift.title + " » ?")) {
+    return;
+  }
+
+  const { error } = await db
+    .from("gifts")
+    .delete()
+    .eq("id", gift.id);
+
+  if (error) {
+    notify("Erreur de suppression : " + error.message, true);
+    return;
+  }
+
+  notify("Cadeau supprimé.");
+  await loadGifts();
+}
+
+async function moveGift(index, direction) {
+  if (!await checkAdmin()) return;
+
+  const otherIndex = index + direction;
+
+  if (otherIndex < 0 || otherIndex >= gifts.length) return;
+
+  const current = gifts[index];
+  const other = gifts[otherIndex];
+
+  const firstOrder = current.sort_order;
+  const secondOrder = other.sort_order;
+
+  const { error: error1 } = await db
+    .from("gifts")
+    .update({ sort_order: secondOrder })
+    .eq("id", current.id);
+
+  if (error1) {
+    notify("Erreur de déplacement : " + error1.message, true);
+    await loadGifts();
+    return;
+  }
+
+  const { error: error2 } = await db
+    .from("gifts")
+    .update({ sort_order: firstOrder })
+    .eq("id", other.id);
+
+  if (error2) {
+    notify("Erreur de déplacement : " + error2.message, true);
+    await loadGifts();
+    return;
+  }
+
+  await loadGifts();
+  notify("Ordre modifié !");
+}
+
+db.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_OUT") {
+    app.style.display = "none";
+    loginSection.style.display = "block";
+  }
+});
+
+checkUser();
+</script>
+</body>
+</html>
