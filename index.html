@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -33,10 +34,7 @@
       text-shadow: 0 3px 8px #0008;
     }
 
-    header p {
-      font-size: 1.1rem;
-      color: #fff;
-    }
+    header p { font-size: 1.1rem; color: #fff; }
 
     .decorations {
       font-size: 2rem;
@@ -151,6 +149,25 @@
       color: #111;
     }
 
+    .gift-info h2 a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    .gift-description {
+      color: #444;
+      font-size: 0.9rem;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .gift-price {
+      text-align: center;
+      font-weight: bold;
+      color: #23603b;
+      margin: 10px 0;
+    }
+
     .stars {
       text-align: center;
       font-size: 1.5rem;
@@ -228,6 +245,44 @@
       color: white;
     }
 
+    #login-section {
+      max-width: 420px;
+      margin: 20px auto 40px;
+      padding: 25px;
+      background: white;
+      color: #111;
+      border: 2px solid #f1d58b;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    #access-code {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    #login-button {
+      width: 100%;
+      padding: 12px;
+      background: #23603b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #logout-button {
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+
     footer {
       text-align: center;
       padding: 25px;
@@ -275,18 +330,7 @@
 
   <div class="stars">✦ ★ ✧ ★ ✦</div>
 
-  <section id="login-section" style="
-    max-width: 420px;
-    margin: 20px auto 40px;
-    padding: 25px;
-    background: white;
-    color: #111;
-    border: 2px solid #f1d58b;
-    border-radius: 12px;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-  ">
+  <section id="login-section">
     <h2>🎁 Accès à ma liste de Noël</h2>
     <p>Entre ton code personnel pour découvrir la liste.</p>
 
@@ -295,178 +339,38 @@
       type="password"
       placeholder="Ton code personnel"
       autocomplete="off"
-      style="
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 16px;
-      "
     >
 
-    <button
-      id="login-button"
-      type="button"
-      style="
-        width: 100%;
-        padding: 12px;
-        background: #23603b;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 16px;
-        cursor: pointer;
-      "
-    >
+    <button id="login-button" type="button">
       Accéder à la liste
     </button>
 
-    <p id="login-message" style="color: #b00020;"></p>
+    <p id="login-message" style="color:#b00020;"></p>
   </section>
 
   <div id="user-section" style="
-    display: none;
-    text-align: center;
-    margin: 20px auto;
-    position: relative;
-    z-index: 2;
+    display:none;
+    text-align:center;
+    margin:20px auto;
+    position:relative;
+    z-index:2;
   ">
     <p id="welcome-message"></p>
     <button id="logout-button" type="button">Se déconnecter</button>
   </div>
 
-  <section id="my-reservations-section" class="reservation-panel" style="display: none;">
+  <section id="my-reservations-section" class="reservation-panel" style="display:none;">
     <h2>🎁 Mes réservations</h2>
     <div id="my-reservations-list">Chargement...</div>
   </section>
 
-  <main class="gift-grid" id="gift-grid" style="display: none;">
+  <p id="gift-loading" style="text-align:center;display:none;">
+    Chargement des cadeaux...
+  </p>
 
-    <article class="gift-card">
-      <a href="https://www.decathlon.fr/p/banc-de-musculation-pliable-inclinable-et-declinable-bench-500/367264/c1m8948872" target="_blank" rel="noopener noreferrer">
-        <img class="gift-image" src="images/Banc_muscu_domyos.png" alt="Banc de musculation DOMYOS">
-      </a>
-      <div class="gift-info">
-        <h2>
-          <a href="https://www.decathlon.fr/p/banc-de-musculation-pliable-inclinable-et-declinable-bench-500/367264/c1m8948872" target="_blank" rel="noopener noreferrer" style="color: #111; text-decoration: none;">
-            Banc de musculation DOMYOS
-          </a>
-        </h2>
-      </div>
-    </article>
+  <p id="gift-error" style="text-align:center;color:#ffe6a0;display:none;"></p>
 
-    <article class="gift-card">
-      <img class="gift-image" src="images/toyota_hilux.jpg" alt="Toyota HILUX double cabine">
-      <div class="gift-info"><h2>Toyota HILUX double cabine</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/scarpa-drago-lv-chaussons-descalade.jpg" alt="Chaussons d'escalade Scarpa Drago LV">
-      <div class="gift-info"><h2>Chaussons d'escalade Scarpa Drago LV</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/casque_musique.webp" alt="Casque musique">
-      <div class="gift-info"><h2>Casque musique</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/casque_gaming.webp" alt="Casque de jeu">
-      <div class="gift-info"><h2>Casque de jeu</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/souris_gaming.webp" alt="Souris gaming">
-      <div class="gift-info"><h2>Souris gaming</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/Ecran_pc.webp" alt="ecran pc">
-      <div class="gift-info"><h2>Écran pc</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/clavier_gaming.webp" alt="Clavier gaming">
-      <div class="gift-info"><h2>Clavier gaming</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/Haut_parleurs.jpg" alt="Haut parleurs">
-      <div class="gift-info"><h2>Haut parleurs</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/disque_nvme.jpg" alt="Disque dur NVMe 2280">
-      <div class="gift-info"><h2>Disque dur NVMe 2280</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/stream_deck.avif" alt="Stream Deck">
-      <div class="gift-info"><h2>Stream Deck</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/barre_son.jpg" alt="Barre de son TV">
-      <div class="gift-info"><h2>Barre de son TV</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/poele-inox.webp" alt="Poêle en inox">
-      <div class="gift-info"><h2>Poêle en inox</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/raspberry-pi-5.webp" alt="Raspberry Pi 5 avec chargeur">
-      <div class="gift-info"><h2>Raspberry Pi 5 + chargeur</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/raspberry_pi_4.webp" alt="Raspberry Pi 4 avec chargeur">
-      <div class="gift-info"><h2>Raspberry Pi 4 + chargeur</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/ecran_raspberry.jpg" alt="Ecran pour Raspberry">
-      <div class="gift-info"><h2>Ecran pour Raspberry</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/esp32.jpg" alt="Carte ESP32">
-      <div class="gift-info"><h2>ESP32(USN-C)</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/ESP32-C6_Touch_LCD_Board.jpg" alt="ESP32-C6 Touch LCD Board">
-      <div class="gift-info"><h2>ESP32-C6 Touch LCD Board</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/SONOFF_ZIGBEE_USB.jpg" alt="Clé Zigbee Sonoff">
-      <div class="gift-info"><h2>Clé Zigbee Sonoff</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/OBD2.jpg" alt="Lecteur OBD">
-      <div class="gift-info"><h2>Lecteur OBD</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/tablette.jpg" alt="Tablette (pas Apple)">
-      <div class="gift-info"><h2>Tablette (pas Apple)</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/flipper_zero.jpg" alt="Flipper Zero">
-      <div class="gift-info"><h2>Flipper Zero</h2></div>
-    </article>
-
-    <article class="gift-card">
-      <img class="gift-image" src="images/pyjama.jpg" alt="Pyjama">
-      <div class="gift-info"><h2>Pyjama</h2></div>
-    </article>
-
-  </main>
+  <main class="gift-grid" id="gift-grid" style="display:none;"></main>
 
   <div class="stars">✧ ★ ✦ ★ ✧</div>
 
@@ -486,33 +390,10 @@
     const loginMessage = document.getElementById("login-message");
     const myReservationsSection = document.getElementById("my-reservations-section");
     const myReservationsList = document.getElementById("my-reservations-list");
+    const giftLoading = document.getElementById("gift-loading");
+    const giftError = document.getElementById("gift-error");
 
     let sessionToken = sessionStorage.getItem("noel_session_token");
-
-    // Cadeaux autorisés à recevoir plusieurs réservations.
-// Par défaut, la liste est vide : tous les cadeaux sont limités à une réservation.
-const MULTI_RESERVATION_GIFTS = new Set([ "raspberry-pi-5-chargeur", "raspberry-pi-4-chargeur", "ecran-pour-raspberry", "esp32-usn-c", "esp32-c6-touch-lcd-board"]);
-    function generateGiftIds() {
-      const cards = document.querySelectorAll(".gift-card");
-
-      cards.forEach((card) => {
-        const title = card.querySelector(".gift-info h2");
-        if (!title) return;
-
-        const giftName = title.textContent.trim();
-
-        const giftId = giftName
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "");
-
-        card.dataset.giftId = giftId;
-      });
-    }
-
-    generateGiftIds();
 
     async function callFunction(functionName, data) {
       const response = await fetch(
@@ -534,6 +415,117 @@ const MULTI_RESERVATION_GIFTS = new Set([ "raspberry-pi-5-chargeur", "raspberry-
       }
 
       return result;
+    }
+
+    async function loadGifts() {
+      giftLoading.style.display = "block";
+      giftError.style.display = "none";
+      giftGrid.replaceChildren();
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/gifts?select=*&order=sort_order.asc`,
+          {
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Impossible de récupérer les cadeaux.");
+        }
+
+        const gifts = await response.json();
+
+        gifts.forEach(gift => {
+          const card = document.createElement("article");
+          card.className = "gift-card";
+          card.dataset.giftId = gift.id;
+          card.dataset.allowMultiple = String(gift.allow_multiple === true);
+
+          if (gift.image_url) {
+            const image = document.createElement("img");
+            image.className = "gift-image";
+            image.src = gift.image_url;
+            image.alt = gift.title || "Image du cadeau";
+            image.loading = "lazy";
+
+            image.onerror = () => {
+              const placeholder = document.createElement("div");
+              placeholder.className = "gift-placeholder";
+              placeholder.textContent = "🎁";
+              image.replaceWith(placeholder);
+            };
+
+            if (gift.url) {
+              const imageLink = document.createElement("a");
+              imageLink.href = gift.url;
+              imageLink.target = "_blank";
+              imageLink.rel = "noopener noreferrer";
+              imageLink.appendChild(image);
+              card.appendChild(imageLink);
+            } else {
+              card.appendChild(image);
+            }
+          } else {
+            const placeholder = document.createElement("div");
+            placeholder.className = "gift-placeholder";
+            placeholder.textContent = "🎁";
+            card.appendChild(placeholder);
+          }
+
+          const info = document.createElement("div");
+          info.className = "gift-info";
+
+          const title = document.createElement("h2");
+
+          if (gift.url) {
+            const link = document.createElement("a");
+            link.href = gift.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = gift.title;
+            title.appendChild(link);
+          } else {
+            title.textContent = gift.title;
+          }
+
+          info.appendChild(title);
+
+          if (gift.description) {
+            const description = document.createElement("p");
+            description.className = "gift-description";
+            description.textContent = gift.description;
+            info.appendChild(description);
+          }
+
+          if (gift.price) {
+            const price = document.createElement("p");
+            price.className = "gift-price";
+            price.textContent = gift.price;
+            info.appendChild(price);
+          }
+
+          card.appendChild(info);
+          giftGrid.appendChild(card);
+        });
+
+        if (gifts.length === 0) {
+          giftError.textContent = "Aucun cadeau n'est enregistré pour le moment.";
+          giftError.style.display = "block";
+        }
+
+      } catch (error) {
+        console.error("Erreur de chargement des cadeaux :", error);
+        giftError.textContent = "Erreur lors du chargement des cadeaux : " + error.message;
+        giftError.style.display = "block";
+        throw error;
+      } finally {
+        giftLoading.style.display = "none";
+      }
     }
 
     function showConnectedUser(name) {
@@ -560,76 +552,68 @@ const MULTI_RESERVATION_GIFTS = new Set([ "raspberry-pi-5-chargeur", "raspberry-
         const allReservations = allData.reservations || [];
         const myReservations = myData.reservations || [];
 
-        // Mettre à jour les informations et boutons de chaque cadeau.
-document.querySelectorAll(".gift-card").forEach(card => {
-  const giftId = card.dataset.giftId;
-  const giftInfo = card.querySelector(".gift-info");
+        document.querySelectorAll(".gift-card").forEach(card => {
+          const giftId = card.dataset.giftId;
+          const giftInfo = card.querySelector(".gift-info");
 
-  let area = giftInfo.querySelector(".reservation-info");
+          let area = giftInfo.querySelector(".reservation-info");
 
-  if (!area) {
-    area = document.createElement("div");
-    area.className = "reservation-info";
-    giftInfo.appendChild(area);
-  }
+          if (!area) {
+            area = document.createElement("div");
+            area.className = "reservation-info";
+            giftInfo.appendChild(area);
+          }
 
-  area.replaceChildren();
+          area.replaceChildren();
 
-  const reservations = allReservations.filter(
-    reservation => reservation.gift_id === giftId
-  );
+          const reservations = allReservations.filter(
+            reservation => reservation.gift_id === giftId
+          );
 
-  const names = [...new Set(
-    reservations.map(reservation => reservation.person_name)
-  )];
+          const names = [...new Set(
+            reservations.map(reservation => reservation.person_name)
+          )];
 
-  const info = document.createElement("p");
+          const info = document.createElement("p");
 
-  info.textContent = names.length
-    ? "Réservé par : " + names.join(", ")
-    : "Personne n'a encore réservé ce cadeau.";
+          info.textContent = names.length
+            ? "Réservé par : " + names.join(", ")
+            : "Personne n'a encore réservé ce cadeau.";
 
-  area.appendChild(info);
+          area.appendChild(info);
 
-  // Vérifier si ce cadeau accepte plusieurs réservations.
-  const allowsMultiple = MULTI_RESERVATION_GIFTS.has(giftId);
+          const allowsMultiple = card.dataset.allowMultiple === "true";
 
-  // En réservation unique, masquer le bouton si le cadeau est réservé.
-  if (reservations.length > 0 && !allowsMultiple) {
-    return;
-  }
+          if (reservations.length > 0 && !allowsMultiple) {
+            return;
+          }
 
-  const reserveButton = document.createElement("button");
+          const reserveButton = document.createElement("button");
+          reserveButton.type = "button";
+          reserveButton.className = "reserve-button";
+          reserveButton.textContent = "Réserver ce cadeau";
 
-  reserveButton.type = "button";
-  reserveButton.className = "reserve-button";
-  reserveButton.textContent = "Réserver ce cadeau";
+          reserveButton.addEventListener("click", async () => {
+            reserveButton.disabled = true;
+            reserveButton.textContent = "Enregistrement...";
 
-  reserveButton.addEventListener("click", async () => {
-    reserveButton.disabled = true;
-    reserveButton.textContent = "Enregistrement...";
+            try {
+              await callFunction("reserve-gift", {
+                token: sessionToken,
+                gift_id: giftId
+              });
 
-    try {
-      await callFunction("reserve-gift", {
-        token: sessionToken,
-        gift_id: giftId
-      });
+              await refreshReservations();
 
-      await refreshReservations();
+            } catch (error) {
+              alert("Impossible d'enregistrer la réservation : " + error.message);
+              await refreshReservations();
+            }
+          });
 
-    } catch (error) {
-      alert("Impossible d'enregistrer la réservation : " + error.message);
+          area.appendChild(reserveButton);
+        });
 
-      // Actualiser l'affichage, notamment si quelqu'un
-      // vient de réserver ce cadeau entre-temps.
-      await refreshReservations();
-    }
-  });
-
-  area.appendChild(reserveButton);
-});
-
-        // N'afficher ici que les réservations du compte connecté.
         myReservationsList.replaceChildren();
 
         if (myReservations.length === 0) {
@@ -673,6 +657,7 @@ document.querySelectorAll(".gift-card").forEach(card => {
               });
 
               await refreshReservations();
+
             } catch (error) {
               alert("Impossible d'annuler : " + error.message);
               cancelButton.disabled = false;
@@ -719,14 +704,14 @@ document.querySelectorAll(".gift-card").forEach(card => {
         sessionToken = result.token;
         sessionStorage.setItem("noel_session_token", sessionToken);
 
+        await loadGifts();
         showConnectedUser(result.name);
+
         loginMessage.textContent = "";
         accessCodeInput.value = "";
 
       } catch (error) {
-        loginMessage.textContent = error.message === "Code incorrect"
-          ? "Code incorrect. Vérifie ta saisie."
-          : error.message;
+        loginMessage.textContent = error.message;
       } finally {
         loginButton.disabled = false;
       }
@@ -743,15 +728,18 @@ document.querySelectorAll(".gift-card").forEach(card => {
           token: sessionToken
         });
 
+        await loadGifts();
         showConnectedUser(result.name);
+
       } catch (error) {
+        console.error("Impossible de restaurer la session :", error);
         showLogin();
       }
     }
 
     loginButton.addEventListener("click", login);
 
-    accessCodeInput.addEventListener("keydown", (event) => {
+    accessCodeInput.addEventListener("keydown", event => {
       if (event.key === "Enter") login();
     });
 
