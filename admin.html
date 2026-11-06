@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -18,11 +19,7 @@ body {
   color: white;
 }
 
-.container {
-  max-width: 950px;
-  margin: auto;
-}
-
+.container { max-width: 950px; margin: auto; }
 h1, h2 { color: #ffe6a0; }
 
 .panel {
@@ -54,6 +51,8 @@ button {
   font-size: 14px;
 }
 
+button:disabled { opacity: .5; cursor: not-allowed; }
+
 .primary { background: #23603b; color: white; }
 .danger { background: #a52a36; color: white; }
 .secondary { background: #ddd; color: #222; }
@@ -68,11 +67,16 @@ button {
 
 .gift h3 { margin-top: 0; }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.gift-image {
+  display: block;
+  max-width: 180px;
+  max-height: 150px;
+  object-fit: contain;
+  margin: 10px 0;
+  border-radius: 6px;
 }
+
+.actions { display: flex; flex-wrap: wrap; gap: 5px; }
 
 #app, #login { display: none; }
 
@@ -96,6 +100,22 @@ button {
   margin: 0;
 }
 
+.help {
+  color: #666;
+  font-size: 13px;
+  margin-top: -8px;
+  margin-bottom: 14px;
+}
+
+#imagePreview {
+  display: none;
+  max-width: 220px;
+  max-height: 180px;
+  object-fit: contain;
+  margin: 5px 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
 </style>
 </head>
 
@@ -103,10 +123,8 @@ button {
 <div class="container">
 
 <h1>🎄 Administration de ma liste de Noël</h1>
-
 <div id="message"></div>
 
-<!-- CONNEXION -->
 <section id="login" class="panel">
   <h2>Connexion administrateur</h2>
 
@@ -119,7 +137,6 @@ button {
   <button class="primary" id="loginButton">Se connecter</button>
 </section>
 
-<!-- ADMINISTRATION -->
 <section id="app">
 
   <div class="panel">
@@ -139,15 +156,17 @@ button {
       <label>Lien du produit</label>
       <input id="url" type="url">
 
-      <label>URL de l'image</label>
-      <input id="image_url" type="url">
+      <label>Image du cadeau</label>
+      <input id="image_file" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+      <div class="help">Choisis une image sur ton ordinateur (JPG, PNG, WEBP ou GIF, 5 Mo maximum).</div>
+      <img id="imagePreview" alt="Aperçu de l'image">
 
       <label class="checkbox">
         <input id="allow_multiple" type="checkbox">
         Autoriser plusieurs réservations
       </label>
 
-      <button class="primary" type="submit">
+      <button class="primary" id="addButton" type="submit">
         Ajouter le cadeau
       </button>
 
@@ -176,6 +195,8 @@ const SUPABASE_KEY =
 const ADMIN_ID =
 "00276736-BEDE-499C-9504-9B1DE789311D";
 
+const BUCKET = "gift-images";
+
 const db = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
@@ -185,18 +206,128 @@ const loginSection = document.getElementById("login");
 const app = document.getElementById("app");
 const message = document.getElementById("message");
 const giftList = document.getElementById("giftList");
+const imageFile = document.getElementById("image_file");
+const imagePreview = document.getElementById("imagePreview");
+const addButton = document.getElementById("addButton");
 
 let gifts = [];
+let previewObjectUrl = null;
 
 function notify(text, error = false) {
   message.textContent = text;
   message.style.color = error ? "#b00020" : "#23603b";
 }
 
+function slugify(text) {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function createGiftId(title) {
+  const base = slugify(title) || "cadeau";
+  let candidate = base;
+  let suffix = 2;
+
+  while (gifts.some(gift => gift.id === candidate)) {
+    candidate = base + "-" + suffix;
+    suffix++;
+  }
+
+  return candidate;
+}
+
+function validateImage(file) {
+  if (!file) return true;
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    notify("Format refusé. Utilise JPG, PNG, WEBP ou GIF.", true);
+    return false;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    notify("L'image dépasse 5 Mo. Choisis un fichier plus léger.", true);
+    return false;
+  }
+
+  return true;
+}
+
+imageFile.addEventListener("change", () => {
+  if (previewObjectUrl) {
+    URL.revokeObjectURL(previewObjectUrl);
+    previewObjectUrl = null;
+  }
+
+  const file = imageFile.files[0];
+
+  if (!file) {
+    imagePreview.style.display = "none";
+    imagePreview.removeAttribute("src");
+    return;
+  }
+
+  if (!validateImage(file)) {
+    imageFile.value = "";
+    imagePreview.style.display = "none";
+    return;
+  }
+
+  previewObjectUrl = URL.createObjectURL(file);
+  imagePreview.src = previewObjectUrl;
+  imagePreview.style.display = "block";
+});
+
+async function uploadImage(file, giftId) {
+  if (!file) return null;
+
+  if (!validateImage(file)) {
+    throw new Error("Image invalide.");
+  }
+
+  const extension = file.name.split(".").pop().toLowerCase();
+  const safeExtension = /^[a-z0-9]+$/.test(extension)
+    ? extension
+    : "jpg";
+
+  const filePath =
+    giftId + "/" + Date.now() + "-" +
+    crypto.randomUUID() + "." + safeExtension;
+
+  const { error } = await db.storage
+    .from(BUCKET)
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type
+    });
+
+  if (error) {
+    throw new Error("Envoi de l'image impossible : " + error.message);
+  }
+
+  const { data } = db.storage
+    .from(BUCKET)
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
+}
+
 async function checkUser() {
   const { data: { user }, error } = await db.auth.getUser();
 
-  if (error || !user || user.id.toLowerCase() !== ADMIN_ID.toLowerCase()) {
+  if (error || !user ||
+      user.id.toLowerCase() !== ADMIN_ID.toLowerCase()) {
     app.style.display = "none";
     loginSection.style.display = "block";
 
@@ -211,6 +342,18 @@ async function checkUser() {
   app.style.display = "block";
 
   await loadGifts();
+  return true;
+}
+
+async function checkAdmin() {
+  const { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user ||
+      user.id.toLowerCase() !== ADMIN_ID.toLowerCase()) {
+    notify("Accès administrateur refusé.", true);
+    return false;
+  }
+
   return true;
 }
 
@@ -286,6 +429,19 @@ function renderGifts() {
       " | Réservations multiples : " +
       (gift.allow_multiple ? "Oui" : "Non");
 
+    card.append(title, details);
+
+    if (gift.image_url) {
+      const img = document.createElement("img");
+      img.className = "gift-image";
+      img.src = gift.image_url;
+      img.alt = gift.title;
+      img.onerror = () => {
+        img.alt = "Image indisponible";
+      };
+      card.appendChild(img);
+    }
+
     const actions = document.createElement("div");
     actions.className = "actions";
 
@@ -314,7 +470,7 @@ function renderGifts() {
     remove.addEventListener("click", () => deleteGift(gift));
 
     actions.append(up, down, edit, remove);
-    card.append(title, details, actions);
+    card.appendChild(actions);
     giftList.appendChild(card);
   });
 }
@@ -323,50 +479,82 @@ document.getElementById("giftForm").addEventListener("submit", async (event) => 
   event.preventDefault();
 
   const title = document.getElementById("title").value.trim();
+  const file = imageFile.files[0];
 
   if (!title) {
     notify("Le nom du cadeau est obligatoire.", true);
     return;
   }
 
+  if (!validateImage(file)) return;
   if (!await checkAdmin()) return;
 
-  const maxOrder = gifts.reduce(
-    (max, gift) => Math.max(max, Number(gift.sort_order) || 0),
-    0
-  );
+  addButton.disabled = true;
+  addButton.textContent = "Enregistrement...";
 
-  const gift = {
-    title,
-    description: document.getElementById("description").value.trim(),
-    price: document.getElementById("price").value || null,
-    url: document.getElementById("url").value.trim() || null,
-    image_url: document.getElementById("image_url").value.trim() || null,
-    allow_multiple: document.getElementById("allow_multiple").checked,
-    sort_order: maxOrder + 1
-  };
+  try {
+    const maxOrder = gifts.reduce(
+      (max, gift) => Math.max(max, Number(gift.sort_order) || 0),
+      0
+    );
 
-  const { error } = await db.from("gifts").insert(gift);
+    const id = createGiftId(title);
 
-  if (error) {
-    notify("Erreur lors de l'ajout : " + error.message, true);
-    return;
+    let imageUrl = null;
+
+    if (file) {
+      notify("Envoi de l'image en cours...");
+      imageUrl = await uploadImage(file, id);
+    }
+
+    const gift = {
+      id,
+      title,
+      description: document.getElementById("description").value.trim(),
+      price: document.getElementById("price").value || null,
+      url: document.getElementById("url").value.trim() || null,
+      image_url: imageUrl,
+      allow_multiple: document.getElementById("allow_multiple").checked,
+      sort_order: maxOrder + 1
+    };
+
+    const { error } = await db.from("gifts").insert(gift);
+
+    if (error) {
+      throw new Error("Erreur lors de l'ajout : " + error.message);
+    }
+
+    document.getElementById("giftForm").reset();
+    imagePreview.style.display = "none";
+
+    if (previewObjectUrl) {
+      URL.revokeObjectURL(previewObjectUrl);
+      previewObjectUrl = null;
+    }
+
+    notify("Cadeau ajouté !");
+    await loadGifts();
+
+  } catch (error) {
+    notify(error.message, true);
+  } finally {
+    addButton.disabled = false;
+    addButton.textContent = "Ajouter le cadeau";
   }
-
-  document.getElementById("giftForm").reset();
-  notify("Cadeau ajouté !");
-  await loadGifts();
 });
 
-async function checkAdmin() {
-  const { data: { user } } = await db.auth.getUser();
+function chooseImageFile() {
+  return new Promise(resolve => {
+    const picker = document.createElement("input");
+    picker.type = "file";
+    picker.accept = "image/jpeg,image/png,image/webp,image/gif";
 
-  if (!user || user.id.toLowerCase() !== ADMIN_ID.toLowerCase()) {
-    notify("Accès administrateur refusé.", true);
-    return false;
-  }
+    picker.addEventListener("change", () => {
+      resolve(picker.files[0] || null);
+    });
 
-  return true;
+    picker.click();
+  });
 }
 
 async function editGift(gift) {
@@ -389,27 +577,43 @@ async function editGift(gift) {
   const url = prompt("Lien du produit :", gift.url || "");
   if (url === null) return;
 
-  const image_url = prompt("URL de l'image :", gift.image_url || "");
-  if (image_url === null) return;
+  let newImageFile = null;
 
-  const { error } = await db
-    .from("gifts")
-    .update({
-      title: title.trim(),
-      description: description.trim(),
-      price: price.trim() || null,
-      url: url.trim() || null,
-      image_url: image_url.trim() || null
-    })
-    .eq("id", gift.id);
+  if (confirm("Veux-tu choisir une nouvelle image depuis ton ordinateur ?")) {
+    newImageFile = await chooseImageFile();
 
-  if (error) {
-    notify("Erreur de modification : " + error.message, true);
-    return;
+    if (newImageFile && !validateImage(newImageFile)) return;
   }
 
-  notify("Cadeau modifié !");
-  await loadGifts();
+  try {
+    let imageUrl = gift.image_url || null;
+
+    if (newImageFile) {
+      notify("Envoi de la nouvelle image...");
+      imageUrl = await uploadImage(newImageFile, gift.id);
+    }
+
+    const { error } = await db
+      .from("gifts")
+      .update({
+        title: title.trim(),
+        description: description.trim(),
+        price: price.trim() || null,
+        url: url.trim() || null,
+        image_url: imageUrl
+      })
+      .eq("id", gift.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    notify("Cadeau modifié !");
+    await loadGifts();
+
+  } catch (error) {
+    notify("Erreur de modification : " + error.message, true);
+  }
 }
 
 async function deleteGift(gift) {
@@ -472,7 +676,7 @@ async function moveGift(index, direction) {
   notify("Ordre modifié !");
 }
 
-db.auth.onAuthStateChange((event, session) => {
+db.auth.onAuthStateChange((event) => {
   if (event === "SIGNED_OUT") {
     app.style.display = "none";
     loginSection.style.display = "block";
@@ -483,3 +687,4 @@ checkUser();
 </script>
 </body>
 </html>
+```
