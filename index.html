@@ -416,7 +416,29 @@ const accessCodeInput = document.getElementById("access-code");
 const loginMessage = document.getElementById("login-message");
 
 let sessionToken = sessionStorage.getItem("noel_session_token");
+// Génération automatique des identifiants des cadeaux
+function generateGiftIds() {
+  const cards = document.querySelectorAll(".gift-card");
 
+  cards.forEach((card) => {
+    const title = card.querySelector(".gift-info h2");
+
+    if (!title) return;
+
+    const giftName = title.textContent.trim();
+
+    const giftId = giftName
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+    card.dataset.giftId = giftId;
+  });
+}
+
+generateGiftIds();
 async function callFunction(functionName, data) {
   const response = await fetch(
     `${SUPABASE_URL}/functions/v1/${functionName}`,
