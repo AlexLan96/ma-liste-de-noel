@@ -489,6 +489,9 @@
 
     let sessionToken = sessionStorage.getItem("noel_session_token");
 
+    // Cadeaux autorisés à recevoir plusieurs réservations.
+// Par défaut, la liste est vide : tous les cadeaux sont limités à une réservation.
+const MULTI_RESERVATION_GIFTS = new Set([ "raspberry-pi-5", "raspberry-pi-4", "ecran-pour-raspberry", "l-esp32", "l-esp32-c6", ]);
     function generateGiftIds() {
       const cards = document.querySelectorAll(".gift-card");
 
@@ -558,60 +561,73 @@
         const myReservations = myData.reservations || [];
 
         // Mettre à jour les informations et boutons de chaque cadeau.
-        document.querySelectorAll(".gift-card").forEach(card => {
-          const giftId = card.dataset.giftId;
-          const giftInfo = card.querySelector(".gift-info");
+document.querySelectorAll(".gift-card").forEach(card => {
+  const giftId = card.dataset.giftId;
+  const giftInfo = card.querySelector(".gift-info");
 
-          let area = giftInfo.querySelector(".reservation-info");
+  let area = giftInfo.querySelector(".reservation-info");
 
-          if (!area) {
-            area = document.createElement("div");
-            area.className = "reservation-info";
-            giftInfo.appendChild(area);
-          }
+  if (!area) {
+    area = document.createElement("div");
+    area.className = "reservation-info";
+    giftInfo.appendChild(area);
+  }
 
-          area.replaceChildren();
+  area.replaceChildren();
 
-          const reservations = allReservations.filter(
-            reservation => reservation.gift_id === giftId
-          );
+  const reservations = allReservations.filter(
+    reservation => reservation.gift_id === giftId
+  );
 
-          const names = [...new Set(
-            reservations.map(reservation => reservation.person_name)
-          )];
+  const names = [...new Set(
+    reservations.map(reservation => reservation.person_name)
+  )];
 
-          const info = document.createElement("p");
-          info.textContent = names.length
-            ? "Réservé par : " + names.join(", ")
-            : "Personne n'a encore réservé ce cadeau.";
+  const info = document.createElement("p");
 
-          area.appendChild(info);
+  info.textContent = names.length
+    ? "Réservé par : " + names.join(", ")
+    : "Personne n'a encore réservé ce cadeau.";
 
-          const reserveButton = document.createElement("button");
-          reserveButton.type = "button";
-          reserveButton.className = "reserve-button";
-          reserveButton.textContent = "Réserver ce cadeau";
+  area.appendChild(info);
 
-          reserveButton.addEventListener("click", async () => {
-            reserveButton.disabled = true;
-            reserveButton.textContent = "Enregistrement...";
+  // Vérifier si ce cadeau accepte plusieurs réservations.
+  const allowsMultiple = MULTI_RESERVATION_GIFTS.has(giftId);
 
-            try {
-              await callFunction("reserve-gift", {
-                token: sessionToken,
-                gift_id: giftId
-              });
+  // En réservation unique, masquer le bouton si le cadeau est réservé.
+  if (reservations.length > 0 && !allowsMultiple) {
+    return;
+  }
 
-              await refreshReservations();
-            } catch (error) {
-              alert("Impossible d'enregistrer la réservation : " + error.message);
-              reserveButton.disabled = false;
-              reserveButton.textContent = "Réserver ce cadeau";
-            }
-          });
+  const reserveButton = document.createElement("button");
 
-          area.appendChild(reserveButton);
-        });
+  reserveButton.type = "button";
+  reserveButton.className = "reserve-button";
+  reserveButton.textContent = "Réserver ce cadeau";
+
+  reserveButton.addEventListener("click", async () => {
+    reserveButton.disabled = true;
+    reserveButton.textContent = "Enregistrement...";
+
+    try {
+      await callFunction("reserve-gift", {
+        token: sessionToken,
+        gift_id: giftId
+      });
+
+      await refreshReservations();
+
+    } catch (error) {
+      alert("Impossible d'enregistrer la réservation : " + error.message);
+
+      // Actualiser l'affichage, notamment si quelqu'un
+      // vient de réserver ce cadeau entre-temps.
+      await refreshReservations();
+    }
+  });
+
+  area.appendChild(reserveButton);
+});
 
         // N'afficher ici que les réservations du compte connecté.
         myReservationsList.replaceChildren();
