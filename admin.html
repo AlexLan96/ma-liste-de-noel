@@ -1,1 +1,95 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration - Liste de Noël</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 25px 15px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#761c2a,#123d2b);
+  color: white;
+}
+
+.container {
+  max-width: 950px;
+  margin: auto;
+}
+
+h1, h2 { color: #ffe6a0; }
+
+.panel {
+  background: white;
+  color: #222;
+  border: 2px solid #f1d58b;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 11px;
+  margin: 7px 0 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+label { font-weight: bold; }
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.primary { background: #23603b; color: white; }
+.danger { background: #a52a36; color: white; }
+.secondary { background: #ddd; color: #222; }
+
+.gift {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 12px 0;
+  color: #222;
+}
+
+.gift h3 { margin-top: 0; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+#app, #login { display: none; }
+
+#message {
+  padding: 10px;
+  margin: 10px 0;
+  color: #23603b;
+  font-weight: bold;
+  white-space: pre-wrap;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.checkbox
