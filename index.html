@@ -439,6 +439,12 @@ function generateGiftIds() {
 }
 
 generateGiftIds();
+  console.table(
+  [...document.querySelectorAll(".gift-card")].map(card => ({
+    cadeau: card.querySelector(".gift-info h2")?.textContent,
+    identifiant: card.dataset.giftId
+  }))
+);
 async function callFunction(functionName, data) {
   const response = await fetch(
     `${SUPABASE_URL}/functions/v1/${functionName}`,
